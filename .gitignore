@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# foto originali (in public/photos ci sono le versioni ottimizzate)
+/foto-originali/
