@@ -4,6 +4,7 @@ import { WindowHero } from "@/components/window-hero";
 import { ProblemPicker } from "@/components/problem-picker";
 import { site } from "@/lib/site";
 import coppi from "../../public/photos/coppi.jpg";
+import logo from "../../public/logo.png";
 import lavoroCoppiEsterno from "../../public/photos/lavori/lavoro-coppi-esterno.jpg";
 import lavoroNuovaApertura from "../../public/photos/lavori/lavoro-nuova-apertura.jpg";
 import lavoroSottotettoLegno from "../../public/photos/lavori/lavoro-sottotetto-legno.jpg";
@@ -48,7 +49,7 @@ export default function Home() {
       <header className="fixed inset-x-0 top-0 z-50 border-b border-rule/70 bg-paper/90 backdrop-blur-md">
         <div className={`${container} flex h-16 items-center justify-between gap-6`}>
           <a href="#" className="flex items-center gap-3" aria-label="MC Service, torna all'inizio">
-            <Image src="/logo.png" alt="" width={44} height={44} priority className="size-11 rounded-full ring-1 ring-rule" />
+            <Image src={logo} alt="" width={44} height={44} priority className="size-11 rounded-full ring-1 ring-rule" />
             <span className="text-lg font-medium tracking-tight">MC Service</span>
           </a>
           <nav aria-label="Sezioni" className="hidden items-center gap-8 md:flex">
