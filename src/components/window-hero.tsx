@@ -6,7 +6,7 @@ import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } f
 import { Phone } from "lucide-react";
 import { sunPosition } from "@/lib/sun";
 import { site } from "@/lib/site";
-import heroPhoto from "../../public/photos/hero-travi.jpg";
+import heroPhoto from "../../public/photos/lavori/lavoro-coppi-esterno.jpg";
 
 type Sun = { time: string; elevation: number; azimuth: number } | null;
 
@@ -86,9 +86,9 @@ function AnimatedHero({ narrow, sun }: { narrow: boolean; sun: Sun }) {
   const open = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)";
   const clip = useTransform(scrollYProgress, [0.05, 0.6], [closed, open]);
   const scale = useTransform(scrollYProgress, [0.05, 0.6], [1.2, 1]);
-  // Da chiusa, la parte luminosa della foto (in alto a sinistra) viene spostata dentro la finestra.
-  const imgX = useTransform(scrollYProgress, [0.05, 0.6], [narrow ? "5%" : "48%", "0%"]);
-  const imgY = useTransform(scrollYProgress, [0.05, 0.6], [narrow ? "52%" : "26%", "0%"]);
+  // Da chiusa, la finestra vera della foto viene centrata nella sagoma della finestra disegnata.
+  const imgX = useTransform(scrollYProgress, [0.05, 0.6], [narrow ? "0%" : "21%", "0%"]);
+  const imgY = useTransform(scrollYProgress, [0.05, 0.6], [narrow ? "22%" : "6%", "0%"]);
   const introOpacity = useTransform(scrollYProgress, [0.12, 0.32], [1, 0]);
   const introY = useTransform(scrollYProgress, [0.12, 0.32], [0, -40]);
   const outroOpacity = useTransform(scrollYProgress, [0.55, 0.75], [0, 1]);
@@ -111,7 +111,7 @@ function StaticHero({ sun }: { sun: Sun }) {
           <div className="mt-8"><CallButton /></div>
         </div>
         <figure className="relative mt-12 aspect-[16/9] w-full">
-          <Image src={heroPhoto} alt="Travi in legno di un sottotetto illuminate da una finestra nel tetto" fill priority sizes="100vw" className="object-cover object-[30%_8%]" />
+          <Image src={heroPhoto} alt="Finestra da tetto montata da MCservice tra i coppi, con il cielo riflesso nel vetro" fill priority sizes="100vw" className="object-cover object-[50%_42%]" />
           <div aria-hidden className="absolute inset-0" style={sunTint(sun)} />
           <figcaption className="absolute bottom-4 left-4 right-4 text-sm text-white sm:left-8"><SunCaption sun={sun} /></figcaption>
         </figure>
@@ -135,8 +135,8 @@ function HeroLayers({ clip, scale, imgX, imgY, introOpacity, introY, outroOpacit
       <div className="sticky top-0 h-svh overflow-hidden">
         <motion.div className="absolute inset-0" style={{ clipPath: clip }}>
           <motion.div className="absolute inset-0" style={{ scale, x: imgX, y: imgY }}>
-            <Image src={heroPhoto} alt="Travi in legno di un sottotetto illuminate da una finestra nel tetto"
-              fill priority sizes="100vw" placeholder="blur" className="object-cover object-[30%_8%]" />
+            <Image src={heroPhoto} alt="Finestra da tetto montata da MCservice tra i coppi, con il cielo riflesso nel vetro"
+              fill priority sizes="100vw" placeholder="blur" className="object-cover object-[50%_42%]" />
           </motion.div>
           <div aria-hidden className="absolute inset-0 transition-[background] duration-1000" style={sunTint(sun)} />
           <div aria-hidden className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/60 to-transparent" />
