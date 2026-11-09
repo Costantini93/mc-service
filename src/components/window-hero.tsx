@@ -4,48 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useReducedMotion, useTransform, type MotionValue } from "motion/react";
 import { Phone } from "lucide-react";
-import { sunPosition } from "@/lib/sun";
 import { site } from "@/lib/site";
 import heroPhoto from "../../public/photos/lavori/lavoro-coppi-esterno.jpg";
-
-type Sun = { time: string; elevation: number; azimuth: number } | null;
-
-function useVeronaSun() {
-  const [sun, setSun] = useState<Sun>(null);
-  useEffect(() => {
-    const tick = () => {
-      const now = new Date();
-      const { elevation, azimuth } = sunPosition(now);
-      setSun({
-        time: new Intl.DateTimeFormat("it-IT", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Rome" }).format(now),
-        elevation,
-        azimuth,
-      });
-    };
-    tick();
-    const id = setInterval(tick, 60_000);
-    return () => clearInterval(id);
-  }, []);
-  return sun;
-}
-
-// Velatura sulla foto: arriva dalla direzione del sole, più calda quando è basso, blu di notte.
-function sunTint(sun: Sun) {
-  if (!sun) return undefined;
-  if (sun.elevation < 0) return { background: "rgba(40, 56, 96, 0.22)", mixBlendMode: "multiply" as const };
-  const warmth = sun.elevation < 15 ? "238, 154, 69" : "243, 194, 77";
-  const strength = Math.max(0.35, Math.min(0.7, 0.8 - sun.elevation / 100));
-  return {
-    background: `linear-gradient(${Math.round(sun.azimuth + 90)}deg, rgba(${warmth}, ${strength}) 0%, rgba(${warmth}, 0) 60%)`,
-    mixBlendMode: "soft-light" as const,
-  };
-}
-
-function SunCaption({ sun }: { sun: Sun }) {
-  if (!sun) return <>La luce sulla foto segue il sole di Verona.</>;
-  if (sun.elevation < 0) return <>Ore {sun.time} a Verona: il sole è tramontato e la foto prende la luce della sera.</>;
-  return <>Ore {sun.time} a Verona, sole a {Math.round(sun.elevation)}°. La luce sulla foto arriva dalla sua direzione.</>;
-}
 
 function CallButton() {
   return (
@@ -61,7 +21,6 @@ const intro = "Riparazione, manutenzione e sostituzione di finestre per mansarde
 
 export function WindowHero() {
   const reduced = useReducedMotion();
-  const sun = useVeronaSun();
   // `ready` evita la differenza tra HTML del server e primo rendering nel browser (errore di idratazione)
   const [view, setView] = useState({ ready: false, narrow: false });
 
@@ -73,8 +32,8 @@ export function WindowHero() {
     return () => mq.removeEventListener("change", set);
   }, []);
 
-  if (view.ready && reduced) return <StaticHero sun={sun} />;
-  return <AnimatedHero key={view.narrow ? "narrow" : "wide"} narrow={view.narrow} sun={sun} />;
+  if (view.ready && reduced) return <StaticHero />;
+  return <AnimatedHero key={view.narrow ? "narrow" : "wide"} narrow={view.narrow} />;
 }
 
 // Avanzamento dello scroll dentro la sezione (0 → 1), calcolato a mano.
@@ -106,7 +65,7 @@ function useSectionProgress(ref: React.RefObject<HTMLElement | null>) {
   return progress;
 }
 
-function AnimatedHero({ narrow, sun }: { narrow: boolean; sun: Sun }) {
+function AnimatedHero({ narrow }: { narrow: boolean }) {
   const ref = useRef<HTMLElement>(null);
   const scrollYProgress = useSectionProgress(ref);
   // La foto parte dentro una finestra da tetto vista in prospettiva e si apre fino a riempire lo schermo.
@@ -125,12 +84,12 @@ function AnimatedHero({ narrow, sun }: { narrow: boolean; sun: Sun }) {
 
   return (
     <section ref={ref} aria-labelledby="hero-title" className="relative h-[240svh]">
-      <HeroLayers clip={clip} scale={scale} imgX={imgX} imgY={imgY} introOpacity={introOpacity} introY={introY} outroOpacity={outroOpacity} sun={sun} />
+      <HeroLayers clip={clip} scale={scale} imgX={imgX} imgY={imgY} introOpacity={introOpacity} introY={introY} outroOpacity={outroOpacity} />
     </section>
   );
 }
 
-function StaticHero({ sun }: { sun: Sun }) {
+function StaticHero() {
   return (
       <section aria-labelledby="hero-title" className="pt-28">
         <div className="mx-auto max-w-[96rem] px-4 sm:px-8">
@@ -142,8 +101,6 @@ function StaticHero({ sun }: { sun: Sun }) {
         </div>
         <figure className="relative mt-12 aspect-[16/9] w-full">
           <Image src={heroPhoto} alt="Finestra da tetto montata da MC Service tra i coppi, con il cielo riflesso nel vetro" fill priority sizes="100vw" className="object-cover object-[50%_42%]" />
-          <div aria-hidden className="absolute inset-0" style={sunTint(sun)} />
-          <figcaption className="absolute bottom-4 left-4 right-4 text-sm text-white sm:left-8"><SunCaption sun={sun} /></figcaption>
         </figure>
       </section>
   );
@@ -157,10 +114,9 @@ type Layers = {
   introOpacity: MotionValue<number>;
   introY: MotionValue<number>;
   outroOpacity: MotionValue<number>;
-  sun: Sun;
 };
 
-function HeroLayers({ clip, scale, imgX, imgY, introOpacity, introY, outroOpacity, sun }: Layers) {
+function HeroLayers({ clip, scale, imgX, imgY, introOpacity, introY, outroOpacity }: Layers) {
   return (
       <div className="sticky top-0 h-svh overflow-hidden">
         <motion.div className="absolute inset-0" style={{ clipPath: clip }}>
@@ -168,7 +124,6 @@ function HeroLayers({ clip, scale, imgX, imgY, introOpacity, introY, outroOpacit
             <Image src={heroPhoto} alt="Finestra da tetto montata da MC Service tra i coppi, con il cielo riflesso nel vetro"
               fill priority sizes="100vw" placeholder="blur" className="object-cover object-[50%_42%]" />
           </motion.div>
-          <div aria-hidden className="absolute inset-0 transition-[background] duration-1000" style={sunTint(sun)} />
           <div aria-hidden className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/60 to-transparent" />
         </motion.div>
 
@@ -186,10 +141,7 @@ function HeroLayers({ clip, scale, imgX, imgY, introOpacity, introY, outroOpacit
           <p className="max-w-[14ch] text-[clamp(2.4rem,6vw,6rem)] font-light leading-[0.95] tracking-[-0.04em]">
             Il sole entra. La pioggia no.
           </p>
-          <div className="mt-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <div className="hidden sm:block"><CallButton /></div>
-            <p className="max-w-[44ch] text-sm text-white/85"><SunCaption sun={sun} /></p>
-          </div>
+          <div className="mt-8 hidden sm:block"><CallButton /></div>
         </motion.div>
       </div>
   );
