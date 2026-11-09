@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
+import { motion, useMotionValue, useReducedMotion, useTransform, type MotionValue } from "motion/react";
 import { Phone } from "lucide-react";
 import { sunPosition } from "@/lib/sun";
 import { site } from "@/lib/site";
@@ -62,23 +62,53 @@ const intro = "Riparazione, manutenzione e sostituzione di finestre per mansarde
 export function WindowHero() {
   const reduced = useReducedMotion();
   const sun = useVeronaSun();
-  const [narrow, setNarrow] = useState(false);
+  // `ready` evita la differenza tra HTML del server e primo rendering nel browser (errore di idratazione)
+  const [view, setView] = useState({ ready: false, narrow: false });
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
-    const set = () => setNarrow(mq.matches);
+    const set = () => setView({ ready: true, narrow: mq.matches });
     set();
     mq.addEventListener("change", set);
     return () => mq.removeEventListener("change", set);
   }, []);
 
-  if (reduced) return <StaticHero sun={sun} />;
-  return <AnimatedHero key={narrow ? "narrow" : "wide"} narrow={narrow} sun={sun} />;
+  if (view.ready && reduced) return <StaticHero sun={sun} />;
+  return <AnimatedHero key={view.narrow ? "narrow" : "wide"} narrow={view.narrow} sun={sun} />;
+}
+
+// Avanzamento dello scroll dentro la sezione (0 → 1), calcolato a mano.
+// Non usiamo useScroll di Motion: su Safari recente passa per ScrollTimeline nativo e il valore resta fermo a 0.
+function useSectionProgress(ref: React.RefObject<HTMLElement | null>) {
+  const progress = useMotionValue(0);
+  useEffect(() => {
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const total = rect.height - window.innerHeight;
+      progress.set(total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(measure);
+    };
+    measure();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [ref, progress]);
+  return progress;
 }
 
 function AnimatedHero({ narrow, sun }: { narrow: boolean; sun: Sun }) {
   const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const scrollYProgress = useSectionProgress(ref);
   // La foto parte dentro una finestra da tetto vista in prospettiva e si apre fino a riempire lo schermo.
   const closed = narrow
     ? "polygon(14% 56%, 84% 52%, 90% 88%, 8% 92%)"
