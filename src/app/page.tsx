@@ -29,6 +29,7 @@ const steps = [
 
 const nav = [
   { href: "#servizi", label: "Servizi" },
+  { href: "#chi-sono", label: "Chi sono" },
   { href: "#come-lavoriamo", label: "Come lavoriamo" },
   { href: "#zona", label: "Zona" },
   { href: "#contatti", label: "Contatti" },
@@ -46,9 +47,9 @@ export default function Home() {
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-rule/70 bg-paper/90 backdrop-blur-md">
         <div className={`${container} flex h-16 items-center justify-between gap-6`}>
-          <a href="#" className="flex items-center gap-3" aria-label="MCservice, torna all'inizio">
+          <a href="#" className="flex items-center gap-3" aria-label="MC Service, torna all'inizio">
             <Image src="/logo.png" alt="" width={44} height={44} priority className="size-11 rounded-full ring-1 ring-rule" />
-            <span className="text-lg font-medium tracking-tight">MCservice</span>
+            <span className="text-lg font-medium tracking-tight">MC Service</span>
           </a>
           <nav aria-label="Sezioni" className="hidden items-center gap-8 md:flex">
             {nav.map((item) => (
@@ -77,6 +78,38 @@ export default function Home() {
             </div>
             <div className="mt-14">
               <ProblemPicker />
+            </div>
+          </div>
+        </section>
+
+        <section id="chi-sono" aria-labelledby="chi-title" className="scroll-mt-16 bg-mist py-24 sm:py-32">
+          <div className={`${container} grid gap-12 lg:grid-cols-12 lg:gap-8`}>
+            <h2 id="chi-title" className="lg:col-span-7">
+              <span className="block whitespace-nowrap text-[clamp(5.5rem,12.5vw,11rem)] font-light leading-[0.85] tracking-[-0.06em]">13 anni</span>
+              <span className="mt-4 block text-2xl font-normal tracking-tight sm:text-3xl">da tecnico specializzato VELUX</span>
+            </h2>
+            <div className="max-w-[54ch] self-end lg:col-span-5 lg:col-start-8">
+              <p className="text-xl leading-relaxed sm:text-2xl sm:leading-relaxed">
+                Ho lavorato in VELUX come tecnico specializzato per 13 anni. Oggi sono un libero professionista e
+                offro gli stessi servizi di allora.
+              </p>
+              <ul className="mt-10 grid grid-cols-2 gap-x-8 text-lg">
+                {site.services.map((s) => (
+                  <li key={s} className="border-t border-ink/15 py-3">{s}</li>
+                ))}
+              </ul>
+              <p className="mt-10 text-lg leading-relaxed text-graphite">
+                Per qualsiasi necessità o richiesta di informazioni, chiamami o scrivimi su WhatsApp.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a href={site.phoneHref} className="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-3 font-medium text-paper">
+                  <Phone aria-hidden className="size-4" />
+                  {site.phoneDisplay}
+                </a>
+                <a href={site.whatsappHref} className="inline-flex items-center rounded-full border border-ink px-5 py-3 font-medium transition-colors hover:bg-ink hover:text-paper">
+                  Scrivi su WhatsApp
+                </a>
+              </div>
             </div>
           </div>
         </section>
@@ -147,20 +180,19 @@ export default function Home() {
 
       <footer id="contatti" className="scroll-mt-16 bg-ink pb-32 pt-24 text-paper sm:pb-16 sm:pt-32">
         <div className={container}>
-          <h2 className="text-xl text-paper/70">Chiamaci per un sopralluogo</h2>
+          <h2 className="text-xl text-paper/70">Chiama per un sopralluogo</h2>
           <a href={site.phoneHref} className="mt-4 block text-[clamp(3rem,11vw,11rem)] font-light leading-none tracking-[-0.05em] hover:text-light">
             {site.phoneDisplay}
           </a>
-          <div className="mt-16 grid gap-8 border-t border-paper/20 pt-8 text-lg sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-16 grid gap-8 border-t border-paper/20 pt-8 text-lg sm:grid-cols-3">
             <a href={site.whatsappHref} className="hover:underline">WhatsApp<br /><span className="text-paper/70">{site.whatsappDisplay}</span></a>
             <a href={`mailto:${site.email}`} className="hover:underline">Email<br /><span className="text-paper/70">{site.email}</span></a>
-            <p>Indirizzo<br /><span className="text-paper/70">{site.address}</span></p>
-            <p>Orari<br /><span className="text-paper/70">{site.hours}</span></p>
+            <a href={site.mapsHref} className="hover:underline">Indirizzo<br /><span className="text-paper/70">{site.address}</span></a>
           </div>
           <div className="mt-16 flex flex-wrap gap-x-8 gap-y-2 text-sm text-paper/50">
-            <span>MCservice, {site.vat}</span>
-            <span>Rivenditore VELUX. VELUX è un marchio registrato del Gruppo VELUX.</span>
-            <span>Foto segnaposto: Unsplash</span>
+            <span>MC Service, {site.vat}</span>
+            <span>VELUX è un marchio registrato del Gruppo VELUX. MC Service è un&apos;attività indipendente.</span>
+            <span>Alcune foto: Unsplash</span>
           </div>
         </div>
       </footer>

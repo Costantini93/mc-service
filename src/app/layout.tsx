@@ -10,9 +10,9 @@ const hanken = Hanken_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "MCservice | Finestre da tetto a Verona",
+  title: "MC Service | Finestre da tetto a Verona",
   description:
-    "Sostituzione, installazione e riparazione di finestre da tetto a Verona e provincia. Rivenditori VELUX: tende, oscuranti, motorizzazione e pratiche per le detrazioni.",
+    "Riparazione, manutenzione, sostituzione e consulenza per finestre da tetto a Verona e provincia, da un ex tecnico specializzato VELUX con 13 anni di esperienza.",
 };
 
 export const viewport: Viewport = { themeColor: "#ffffff" };

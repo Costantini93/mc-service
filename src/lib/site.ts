@@ -1,14 +1,17 @@
-// SEGNAPOSTO: tutti i contatti qui sotto sono finti. Sostituirli con quelli reali prima di pubblicare.
+// Contatti reali MC Service. Ancora da completare: P.IVA (obbligatoria sul sito di un'attività in Italia).
 export const site = {
-  name: "MCservice",
-  phoneDisplay: "045 123 4567",
-  phoneHref: "tel:+390451234567",
-  whatsappDisplay: "333 123 4567",
-  whatsappHref: "https://wa.me/393331234567",
-  email: "info@esempio-mcservice.it",
-  address: "Via Esempio 12, 37100 Verona",
-  vat: "P.IVA 00000000000",
-  hours: "Lun–ven 8:00–18:00, sabato su appuntamento",
+  name: "MC Service",
+  phoneDisplay: "351 169 3663",
+  phoneHref: "tel:+393511693663",
+  // Stesso numero del telefono: da confermare che abbia WhatsApp
+  whatsappDisplay: "351 169 3663",
+  whatsappHref: "https://wa.me/393511693663",
+  email: "mcserviceverona@gmail.com",
+  address: "Vicoletto cieco Pozzo San Marco 5, 37121 Verona",
+  mapsHref:
+    "https://www.google.com/maps/search/?api=1&query=Vicoletto+cieco+Pozzo+San+Marco+5+37121+Verona",
+  vat: "P.IVA da inserire",
+  services: ["Riparazione", "Manutenzione", "Sostituzione", "Consulenza"],
   area: [
     "Verona città",
     "Valpolicella",

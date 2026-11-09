@@ -57,7 +57,7 @@ function CallButton() {
   );
 }
 
-const intro = "Sostituzione, installazione e riparazione di finestre per mansarde e sottotetti, in tutta la provincia. Siamo rivenditori VELUX.";
+const intro = "Riparazione, manutenzione e sostituzione di finestre per mansarde e sottotetti, in tutta la provincia. Da un tecnico che ha lavorato 13 anni in VELUX.";
 
 export function WindowHero() {
   const reduced = useReducedMotion();
@@ -111,7 +111,7 @@ function StaticHero({ sun }: { sun: Sun }) {
           <div className="mt-8"><CallButton /></div>
         </div>
         <figure className="relative mt-12 aspect-[16/9] w-full">
-          <Image src={heroPhoto} alt="Finestra da tetto montata da MCservice tra i coppi, con il cielo riflesso nel vetro" fill priority sizes="100vw" className="object-cover object-[50%_42%]" />
+          <Image src={heroPhoto} alt="Finestra da tetto montata da MC Service tra i coppi, con il cielo riflesso nel vetro" fill priority sizes="100vw" className="object-cover object-[50%_42%]" />
           <div aria-hidden className="absolute inset-0" style={sunTint(sun)} />
           <figcaption className="absolute bottom-4 left-4 right-4 text-sm text-white sm:left-8"><SunCaption sun={sun} /></figcaption>
         </figure>
@@ -135,7 +135,7 @@ function HeroLayers({ clip, scale, imgX, imgY, introOpacity, introY, outroOpacit
       <div className="sticky top-0 h-svh overflow-hidden">
         <motion.div className="absolute inset-0" style={{ clipPath: clip }}>
           <motion.div className="absolute inset-0" style={{ scale, x: imgX, y: imgY }}>
-            <Image src={heroPhoto} alt="Finestra da tetto montata da MCservice tra i coppi, con il cielo riflesso nel vetro"
+            <Image src={heroPhoto} alt="Finestra da tetto montata da MC Service tra i coppi, con il cielo riflesso nel vetro"
               fill priority sizes="100vw" placeholder="blur" className="object-cover object-[50%_42%]" />
           </motion.div>
           <div aria-hidden className="absolute inset-0 transition-[background] duration-1000" style={sunTint(sun)} />
